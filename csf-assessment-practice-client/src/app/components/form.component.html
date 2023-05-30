@@ -1,0 +1,41 @@
+<h1>Upload your ZIP File</h1>
+
+<form [formGroup]="form" (submit)="upload()">
+  <table>
+    <tr>
+        <td>Name:</td>
+        <td>
+          <input type="text" placeholder="Name" size="30" formControlName="name">
+        </td>
+      </tr>
+    <tr>
+      <td>Title:</td>
+      <td>
+        <input type="text" placeholder="Title" size="30" formControlName="title">
+      </td>
+    </tr>
+    <tr>
+        <td>Comments: </td>
+        <td>
+            <textarea rows="5" cols="30" placeholder="Your Comments in here" formControlName="comments"></textarea>
+        </td>
+    </tr>
+
+    <tr>
+      <td>Archive:</td>
+      <td>
+        <input type="file" placeholder="ZIP archive of photos" formControlName="file" #uploadFile>
+      </td>
+    </tr>
+<br>
+    <tr>
+    <td></td>
+      <td>
+        <button type="button" [routerLink]="['/list']">Cancel</button>&nbsp;
+        <button type="submit" [disabled]="form.invalid">Upload</button>
+      </td>
+
+    </tr>
+  </table>
+</form>
+
