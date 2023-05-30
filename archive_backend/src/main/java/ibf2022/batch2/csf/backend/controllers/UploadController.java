@@ -2,7 +2,9 @@ package ibf2022.batch2.csf.backend.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,14 +15,16 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import ibf2022.batch2.csf.backend.repositories.ImageRepository;
+
 @Controller
 @RequestMapping
 @CrossOrigin(origins="*")
 public class UploadController {
 
 	// TODO: Task 2, Task 3, Task 4
-	// @Autowired
-    // private SpacesRepository spacesRepo;
+	@Autowired
+    private ImageRepository imageRepo;
 
     @PostMapping(path="/upload", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
@@ -31,13 +35,14 @@ public class UploadController {
 		System.out.println(">>>>> title:>>>>>\n" + title);
         System.out.println(">>>>> comments:>>>>>\n" + comments);
         System.out.println(">>>>> filename:>>>>>\n" + myFile.getOriginalFilename());
-        // try{
-        //     URL url = spacesRepo.upload(title, myFile);
-        // } catch (IOException ex){
-        //     ex.printStackTrace();
-        // }
-        return ResponseEntity.ok("{}");
-
+		
+		try{
+            List<String> url = (List<String>) imageRepo.upload(name, title, comments, myFile);
+			
+        } catch (IOException ex){
+            ex.printStackTrace();
+        }
+		return ResponseEntity.ok("{}");
 
     }
 	
