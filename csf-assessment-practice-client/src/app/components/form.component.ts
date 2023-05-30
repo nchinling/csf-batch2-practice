@@ -34,7 +34,7 @@ export class FormComponent implements OnInit{
     console.info('>>> file: ', f)
 
     //use promise
-    firstValueFrom(this.uploadSvc.upload(data['title'], f))
+    firstValueFrom(this.uploadSvc.upload(data['name'],data['title'],data['comments'], f))
       .then(result=>{
         alert('uploaded')
         this.form.reset
