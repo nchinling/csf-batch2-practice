@@ -2,9 +2,11 @@ package ibf2022.batch2.csf.backend.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import ibf2022.batch2.csf.backend.repositories.ArchiveRepository;
 import ibf2022.batch2.csf.backend.repositories.ImageRepository;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 
 @Controller
 @RequestMapping
@@ -25,6 +30,9 @@ public class UploadController {
 	// TODO: Task 2, Task 3, Task 4
 	@Autowired
     private ImageRepository imageRepo;
+
+    @Autowired
+    private ArchiveRepository archiveRepo;
 
     @PostMapping(path="/upload", consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
@@ -36,13 +44,31 @@ public class UploadController {
         System.out.println(">>>>> comments:>>>>>\n" + comments);
         System.out.println(">>>>> filename:>>>>>\n" + myFile.getOriginalFilename());
 		
+        List<String> urls = new ArrayList<String>();
+        String bundleId = null;
 		try{
-            List<String> url = (List<String>) imageRepo.upload(name, title, comments, myFile);
-			
+            // String title, String name, String comments, List<String> urls
+            urls = (List<String>) imageRepo.upload(name, title, comments, myFile);
+			bundleId = (String) archiveRepo.recordBundle(title, name, comments, urls);
+            System.out.println(">>>>> UploadedUrls: \n" + urls);
+
+            JsonObject resp = Json.createObjectBuilder()
+            .add("bundleId", bundleId)
+            .build();
+            System.out.println(">>>resp: " + resp);
+    
+        return ResponseEntity.ok(resp.toString());
         } catch (IOException ex){
-            ex.printStackTrace();
+            // ex.printStackTrace();
+            String errorMessage = ex.getMessage();
+            return ResponseEntity
+            //status 500 is Internal server error. refer to mdn 
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body("{\"error\" : \"" + errorMessage + "\"}");
         }
-		return ResponseEntity.ok("{}");
+            // .body("{\"error\" : \"record not found\"}");
+        
 
     }
 	

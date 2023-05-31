@@ -43,6 +43,7 @@ public class ImageRepository {
 		ZipEntry entry;
 		List<String> uploadedUrls = new ArrayList<>();
 
+		//for each photo
 		while ((entry = zipInputStream.getNextEntry()) != null) {
 			if (!entry.isDirectory()) {
 				// Get the entry's name and create a unique key
@@ -84,6 +85,7 @@ public class ImageRepository {
 				zipInputStream.closeEntry();
 			}
 		
+
 			zipInputStream.close();
 		
 			System.out.println(">>>>> Successfully uploaded image>>>>>\n" );
