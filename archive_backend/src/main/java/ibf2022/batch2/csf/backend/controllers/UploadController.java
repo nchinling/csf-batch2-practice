@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,15 +12,19 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import ibf2022.batch2.csf.backend.models.Bundle;
 import ibf2022.batch2.csf.backend.repositories.ArchiveRepository;
 import ibf2022.batch2.csf.backend.repositories.ImageRepository;
 import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 
 @Controller
@@ -74,8 +79,45 @@ public class UploadController {
 	
 
 	// TODO: Task 5
+    
+    // @GetMapping(path="/bundle/{bundleId}")
+    @GetMapping(path="/bundle")
+    @ResponseBody
+    public ResponseEntity<String> getBundleResponse(@RequestParam String bundleId){
+
+        System.out.println(">>>Inside getBundleResponse>>>>>");
+        JsonObject resp = null;
+        List<String> urlList = new ArrayList<>();
+            try{
+                Bundle bundle = archiveRepo.getBundleByBundleId(bundleId);
+               
+                urlList = bundle.getUrls();
+                JsonArrayBuilder urlListBuilder = Json.createArrayBuilder(urlList);
+                resp = Json.createObjectBuilder()
+                .add("bundleId", bundleId)
+                .add("date", bundle.getDate())
+                .add("title", bundle.getTitle())
+                .add("name", bundle.getName())
+                .add("comments", bundle.getComments())
+                .add("urls", urlListBuilder.build())
+                .build();
+
+            } catch (IOException ex){
+                return ResponseEntity.status(400)
+                    .body(
+                        Json.createObjectBuilder()
+                            .add("error", ex.getMessage())
+                            .build().toString()
+                    );
+            }
+
+            return ResponseEntity.ok(resp.toString());
+
+        }
 	
 
+
+        
 	// TODO: Task 6
 
 }

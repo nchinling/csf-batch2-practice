@@ -2,6 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { UploadService } from '../upload.service';
+import { BundleIdResponse } from '../models';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-form',
@@ -13,6 +15,10 @@ export class FormComponent implements OnInit{
   form!: FormGroup
   fb=inject(FormBuilder)
   uploadSvc = inject(UploadService)
+  router = inject(Router)
+  
+  //returned from server
+  bundleId$!: Promise<BundleIdResponse> 
 
   @ViewChild('uploadFile')
   uploadFile!: ElementRef
@@ -33,15 +39,24 @@ export class FormComponent implements OnInit{
     console.info('>>> data: ', data)
     console.info('>>> file: ', f)
 
-    //use promise
-    firstValueFrom(this.uploadSvc.upload(data['name'],data['title'],data['comments'], f))
+    //use promise. need to return and throw if assigned to a promise here
+    // this.bundleId$=firstValueFrom(this.uploadSvc.upload(data['name'],data['title'],data['comments'], f))
+    this.bundleId$=firstValueFrom(this.uploadSvc.upload(data['name'],data['title'],data['comments'], f))
       .then(result=>{
         alert('uploaded')
         this.form.reset
+        // this.router.navigate(['/display'])
+        return result
       })
       .catch(err =>{
         alert(JSON.stringify(err))
+        throw err
       })
+
+      this.router.navigate(['/display'])
+
+    
+
   }
 
 

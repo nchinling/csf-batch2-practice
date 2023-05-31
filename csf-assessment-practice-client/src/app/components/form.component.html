@@ -39,3 +39,14 @@
   </table>
 </form>
 
+<div *ngIf="bundleId$ | async as b" style="font-size: 1.5em;">
+  <table>
+      <tr>
+          Bundle Id &nbsp;&nbsp;
+          {{b.bundleId}}
+      </tr>
+  </table>
+</div> 
+
+
+

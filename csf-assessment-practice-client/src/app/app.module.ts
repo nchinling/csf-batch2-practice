@@ -20,7 +20,8 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    FormComponent
+    FormComponent,
+    DisplayComponent
   ],
   imports: [
     BrowserModule, ReactiveFormsModule, HttpClientModule,

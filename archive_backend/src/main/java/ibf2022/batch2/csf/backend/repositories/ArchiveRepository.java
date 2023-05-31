@@ -1,13 +1,19 @@
 package ibf2022.batch2.csf.backend.repositories;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+
+import ibf2022.batch2.csf.backend.models.Bundle;
 
 @Repository
 public class ArchiveRepository {
@@ -52,8 +58,16 @@ public class ArchiveRepository {
 	// Write the native mongo query that you will be using in this method
 	//
 	//
-	public Object getBundleByBundleId(/* any number of parameters here */) {
-		return null;
+	public Bundle getBundleByBundleId(String bundleId) throws IOException {
+		
+		Criteria criteria = Criteria.where("_id").is(bundleId);
+        Query query = Query.query(criteria);
+
+        Bundle bundle = mongoTemplate.findOne(query, Bundle.class, 
+                                    "archives");
+        return bundle;
+		
+		
 	}
 
 	//TODO: Task 6
