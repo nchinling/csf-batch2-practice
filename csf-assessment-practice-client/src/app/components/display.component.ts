@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { BundleIdResponse, BundleMongoResponse } from '../models';
 import { UploadService } from '../upload.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-display',
@@ -18,6 +19,9 @@ export class DisplayComponent implements OnInit {
 
   bundleId!: string
 
+  bundleIdFromHome!: string | null
+  activateRoute = inject(ActivatedRoute)
+
   bundleLinks!: string[]
 
 
@@ -31,6 +35,7 @@ export class DisplayComponent implements OnInit {
 
     //obtain value of bundleId using subscription
     this.bundleIdSubscription = this.bundleId$.subscribe((response) => {
+      //bundleId is passed to get bundleMongoResponse
       this.bundleId = response.bundleId;
       console.log('>>>>>>>The bundleId in ngOnInit is>>>>>> :', this.bundleId);
       this.bundleMongoResponse$ = this.uploadSvc.getBundle(this.bundleId)
@@ -48,7 +53,10 @@ export class DisplayComponent implements OnInit {
   }
 
   ngAfterViewInit(): void{
+    //for clicking on links
+    // this.bundleIdFromHome = this.activateRoute.snapshot.paramMap.get('bundleId');
     // this.bundleMongoResponse$ = this.uploadSvc.getBundle(this.bundleId)
+
     // this.bundleLinksSubscription = this.bundleMongoResponse$.subscribe((response) => {
     //   this.bundleLinks = response.urls;
     //   console.log('The urls are :', this.bundleLinks);

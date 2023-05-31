@@ -34,8 +34,15 @@ export class UploadService{
             .set("bundleId", bundleId)
    
         console.info('>>>>>>>the bundleId in getBundle is >>>>>>>>', bundleId)
+        return this.http.get<BundleMongoResponse>('http://localhost:8080/bundle/'+`${bundleId}`, {params})
+        // return this.http.get<BundleMongoResponse>('http://localhost:8080/bundle', {params})
+    }
+
+    getAllBundles(): Observable<BundleMongoResponse[]>{
+   
+        console.info('>>>>>>>In getAllBundles() >>>>>>>>')
         // return this.http.get<BundleMongoResponse>('http://localhost:8080/bundle/'+`${bundleId}`, {params})
-        return this.http.get<BundleMongoResponse>('http://localhost:8080/bundle', {params})
+        return this.http.get<BundleMongoResponse[]>('http://localhost:8080/bundles')
     }
 
 }

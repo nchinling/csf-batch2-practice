@@ -1,1 +1,25 @@
-<p>list works!</p>
+<h1>Photo storage</h1>
+
+
+<button type="button" [routerLink]="['/form']">Upload</button>
+
+
+<!-- <div *ngFor="let b of allBundlesResponse$ | async; let i = index" (click)="selected(i)" > -->
+<div *ngFor="let b of allBundlesResponse$ | async; let i = index" [routerLink]="['/display', b.bundleId ]" >
+    <!-- <a href="{{ link }}">{{link}}</a> -->
+    <td>
+        <h3>{{b.title}}</h3>
+    </td>
+    <td>
+        <h4>{{b.date}}</h4>
+    </td>
+</div>  
+
+
+<!-- <div *ngFor="let c of carts$ | async" [routerLink]="['/cart', c.cartId ]">
+
+    <h3>{{ c.title }} ({{ c.items.length }})</h3>
+  
+</div> -->
+
+

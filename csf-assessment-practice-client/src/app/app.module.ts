@@ -13,6 +13,7 @@ import { UploadService } from './upload.service';
 const appRoutes: Routes = [
   { path: '', component: ListComponent, title: 'Photo Storage' },
   { path: 'form', component: FormComponent, title: 'Form'},
+  // { path: 'display', component: DisplayComponent, title: 'Display'},
   { path: 'display', component: DisplayComponent, title: 'Display'},
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ]
@@ -21,7 +22,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     FormComponent,
-    DisplayComponent
+    DisplayComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule, ReactiveFormsModule, HttpClientModule,

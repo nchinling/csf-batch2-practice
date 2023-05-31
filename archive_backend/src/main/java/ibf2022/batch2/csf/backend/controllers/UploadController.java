@@ -24,6 +24,7 @@ import ibf2022.batch2.csf.backend.models.Bundle;
 import ibf2022.batch2.csf.backend.repositories.ArchiveRepository;
 import ibf2022.batch2.csf.backend.repositories.ImageRepository;
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 
@@ -80,8 +81,8 @@ public class UploadController {
 
 	// TODO: Task 5
     
-    // @GetMapping(path="/bundle/{bundleId}")
-    @GetMapping(path="/bundle")
+    @GetMapping(path="/bundle/{bundleId}")
+    // @GetMapping(path="/bundle")
     @ResponseBody
     public ResponseEntity<String> getBundleResponse(@RequestParam String bundleId){
 
@@ -111,13 +112,44 @@ public class UploadController {
                     );
             }
 
+            System.out.println(">>>>> List of Bundles: \n" + resp.toString());
             return ResponseEntity.ok(resp.toString());
 
         }
 	
 
-
-        
 	// TODO: Task 6
+
+    @GetMapping("/bundles")
+    @ResponseBody
+    public ResponseEntity<List<Bundle>> getAllBundles() {
+    List<Bundle> bundleList = archiveRepo.getBundles();
+    return ResponseEntity.ok(bundleList);
+}
+
+     
+    // @GetMapping(path="/bundles")
+    // // @GetMapping(path="/bundle")
+    // @ResponseBody
+    // public ResponseEntity<String> getAllBundles(){
+
+    //     System.out.println(">>>Inside getAllBundlesxxx>>>>>");
+ 
+    //     List<Bundle> bundleList = archiveRepo.getBundles();
+    //     System.out.println(">>>The bundleList is >>>>>" +bundleList);
+    //         JsonArrayBuilder bundleListBuilder = Json.createArrayBuilder(bundleList);
+            
+    //         JsonArray resp = bundleListBuilder.build();
+    //         System.out.println(">>>Response for getAllBundles>>>>>" +resp);
+
+    //     return ResponseEntity.ok(resp.toString());
+   
+
+    //     // return null;
+
+    // }
+
+   
+
 
 }
